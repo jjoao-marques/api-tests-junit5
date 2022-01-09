@@ -1,7 +1,8 @@
 package br.com.maques.api.resources;
 
-import br.com.maques.api.domain.User;
+import br.com.maques.api.domain.dto.UserDTO;
 import br.com.maques.api.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +18,11 @@ public class UserResource {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(userService.findById(id));
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(mapper.map(userService.findById(id), UserDTO.class));
     }
 }
