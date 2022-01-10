@@ -1,8 +1,10 @@
 package br.com.maques.api.services.Impl;
 
+import br.com.maques.api.Utils.MessageUtil;
 import br.com.maques.api.domain.User;
 import br.com.maques.api.domain.dto.UserDTO;
 import br.com.maques.api.repositories.UserRepository;
+import br.com.maques.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,6 +54,19 @@ class UserServiceImplTest {
         Assertions.assertEquals(NAME, response.getName());
         Assertions.assertEquals(EMAIL, response.getEmail());
         Assertions.assertEquals(ID, response.getId());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException(){
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenThrow(
+                new ObjectNotFoundException(MessageUtil.OBJECT_NOT_FOUND));
+
+        try {
+            service.findById(ID);
+        }catch (Exception e) {
+            Assertions.assertEquals(ObjectNotFoundException.class, e.getClass());
+            Assertions.assertEquals(MessageUtil.OBJECT_NOT_FOUND, e.getMessage());
+        }
     }
 
     @Test
