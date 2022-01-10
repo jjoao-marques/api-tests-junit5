@@ -137,7 +137,7 @@ class UserServiceImplTest {
 
         try {
             optionalUser.get().setId(2L);
-            service.create(userDTO);
+            service.update(userDTO);
         }catch (Exception e) {
             Assertions.assertEquals(DataIntegrityViolationException.class, e.getClass());
             Assertions.assertEquals(MessageUtil.EMAIL_ALREADY_EXISTS, e.getMessage());
@@ -147,7 +147,11 @@ class UserServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void deleteWithSuccess() {
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(optionalUser);
+        Mockito.doNothing().when(userRepository).deleteById(Mockito.anyLong());
+        service.delete(ID);
+        Mockito.verify(userRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
     }
 
     private void startUser() {
