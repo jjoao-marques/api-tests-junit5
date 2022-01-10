@@ -4,6 +4,7 @@ import br.com.maques.api.Utils.MessageUtil;
 import br.com.maques.api.domain.User;
 import br.com.maques.api.domain.dto.UserDTO;
 import br.com.maques.api.repositories.UserRepository;
+import br.com.maques.api.services.exceptions.DataIntegrityViolationException;
 import br.com.maques.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -97,6 +98,21 @@ class UserServiceImplTest {
         Assertions.assertEquals(NAME, response.getName());
         Assertions.assertEquals(EMAIL, response.getEmail());
         Assertions.assertEquals(PASSWORD, response.getPassword());
+
+    }
+
+    @Test
+    void whenCreateThenReturnAnDataIntegrityViolationException() {
+        Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(optionalUser);
+
+        try {
+            optionalUser.get().setId(2L);
+            service.create(userDTO);
+        }catch (Exception e) {
+            Assertions.assertEquals(DataIntegrityViolationException.class, e.getClass());
+            Assertions.assertEquals(MessageUtil.EMAIL_ALREADY_EXISTS, e.getMessage());
+        }
+
 
     }
 
