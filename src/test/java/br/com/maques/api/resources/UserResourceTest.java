@@ -118,7 +118,16 @@ class UserResourceTest {
     }
 
     @Test
-    void delete() {
+    void whenDeleteThenReturnSuccess() {
+        Mockito.doNothing().when(userService).delete(Mockito.anyLong());
+
+        ResponseEntity<Void> response = userResource.delete(ID);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        Mockito.verify(userService, Mockito.times(1)).delete(Mockito.anyLong());
+
     }
 
     private void startUser() {
