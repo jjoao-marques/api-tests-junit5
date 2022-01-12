@@ -2,11 +2,10 @@ package br.com.maques.api.resources.Exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter
+@Getter
 @AllArgsConstructor
 public class StandardError {
 

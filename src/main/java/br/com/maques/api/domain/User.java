@@ -6,12 +6,11 @@ import lombok.*;
 import javax.persistence.*;
 
 
-
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity(name = "tb_user")
 public class User {
 
