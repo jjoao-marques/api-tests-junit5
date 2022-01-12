@@ -1,6 +1,7 @@
 package br.com.maques.api.resources.Exceptions;
 
 import br.com.maques.api.Utils.MessageUtil;
+import br.com.maques.api.services.exceptions.DataIntegrityViolationException;
 import br.com.maques.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +40,16 @@ class ResourceExceptionHandlerTest {
     }
 
     @Test
-    void emailAlreadyExists() {
+    void whenEmailAlreadyExistsThen() {
+        ResponseEntity<StandardError> response = resourceExceptionHandler.EmailAlreadyExists(
+                new DataIntegrityViolationException( MessageUtil.EMAIL_ALREADY_EXISTS), new MockHttpServletRequest());
+
+        Assertions.assertNotNull(response);
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(StandardError.class, response.getBody().getClass());
+        Assertions.assertEquals(MessageUtil.EMAIL_ALREADY_EXISTS, response.getBody().getError());
+        Assertions.assertEquals(400, response.getBody().getStatus());
     }
 }
